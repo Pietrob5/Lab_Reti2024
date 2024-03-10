@@ -180,12 +180,12 @@ void insert(Database *database, struct Persona *persona) {
     insertByAge(database->age, persona);
 }
 
-void printName(IndexNodeString* database) {
+void print(IndexNodeString* database) {
     if (database == NULL)
         return;
-    printName(database->left);
+    print(database->left);
     printf("%s\n", database->value);
-    printName(database->right);
+    print(database->right);
 }
 
 void printAge(IndexNodeInt* database) {
@@ -260,14 +260,13 @@ int main() {
     insert(d, gatto);
     insert(d, giulia);
     insert(d, mamma);
-   /* printName(d->name);
-    printName(d->surname);
-    printName(d->address);
-    printAge(d->age);*/
+    print(d->name);
+    printAge(d->age);
     struct Persona *trovato=findByAge(d, 456);
     if (trovato != NULL)
         printf("%s\n", trovato->surname);
     else
         printf("NON trovato\n");
+    freeDatabase(d);
     return 0;
 }
