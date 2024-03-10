@@ -262,11 +262,10 @@ int main() {
     insert(d, mamma);
     print(d->name);
     printAge(d->age);
-    struct Persona *trovato=findByAge(d, 456);
+    struct Persona *trovato=findByAge(d, 200);
     if (trovato != NULL)
         printf("%s\n", trovato->surname);
     else
         printf("NON trovato\n");
-    freeDatabase(d);
     return 0;
 }
