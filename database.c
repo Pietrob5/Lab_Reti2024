@@ -1,4 +1,4 @@
-#include "database.h"
+#include "database.h"   //I made some changhes in the .h file
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
