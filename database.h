@@ -39,3 +39,9 @@ struct Persona* findByName(Database * database, char * name);
 struct Persona* findBySurname(Database * database, char * surname);
 struct Persona* findByAddress(Database * database, char * address);
 struct Persona* findByAge(Database * database, int age);
+
+//Aux functions
+void print(IndexNodeString* database);
+void printAge(IndexNodeInt* database);
+Database *newDatabase();
+struct Persona *newPersona(char* n, char* s, char* a, int age);

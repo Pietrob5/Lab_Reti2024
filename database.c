@@ -16,7 +16,7 @@ Database *newDatabase() {
 }
 
 struct Persona *newPersona(char* n, char* s, char* a, int age){
-    struct Persona *p=malloc(sizeof(struct Persona)); //non so se i nomi vanno messi con malloc
+    struct Persona *p=malloc(sizeof(struct Persona)); 
     p->name=malloc(sizeof(n));
     strcpy(p->name,n);
     p->surname=malloc(sizeof(s));
@@ -139,7 +139,7 @@ void insertByAge(IndexNodeInt* database, struct Persona* persona) {
         printf("PROBLEMI PROBLEMI PROBLEMI\n");
         return;
     }
-    if (database->value == 0) { //not sure if value is initialized =0
+    if (database->value == 0) { 
         database->value=persona->age;
         database->user=persona;
         return;
@@ -246,26 +246,4 @@ struct Persona * searchAge(IndexNodeInt* database, int key) {
 
 struct Persona* findByAge(Database * database, int age) {
     return searchAge(database->age, age);
-}
-
-int main() {
-    Database *d=newDatabase();
-    struct Persona *pietro=newPersona("pietro", "bartolocci", "gabelletta", 21);
-    struct Persona *gatto=newPersona("zatto", "puma", "casa mia", 6);
-    struct Persona *rrr=newPersona("rrr", "franco", "cuccia", 78);
-    struct Persona *giulia=newPersona("giulia", "rossi", "marmore", 18);
-    struct Persona *mamma=newPersona("aaa", "mamma", "terni", 200);
-    insert(d, pietro);
-    insert(d, rrr);
-    insert(d, gatto);
-    insert(d, giulia);
-    insert(d, mamma);
-    print(d->name);
-    printAge(d->age);
-    struct Persona *trovato=findByAge(d, 200);
-    if (trovato != NULL)
-        printf("%s\n", trovato->surname);
-    else
-        printf("NON trovato\n");
-    return 0;
 }
