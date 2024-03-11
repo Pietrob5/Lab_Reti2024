@@ -8,6 +8,10 @@ Database *newDatabase() {
     IndexNodeString *s=malloc(sizeof(IndexNodeString));
     IndexNodeString *a=malloc(sizeof(IndexNodeString));
     IndexNodeInt *y=malloc(sizeof(IndexNodeInt));
+    n={0};
+    s=={0};
+    a={0};
+    y={0};
     d->name=n;
     d->surname=s;
     d->address=a;
