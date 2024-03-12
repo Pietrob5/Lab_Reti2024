@@ -7,12 +7,12 @@ Database *newDatabase() {
     IndexNodeString *n=malloc(sizeof(IndexNodeString));
     IndexNodeString *s=malloc(sizeof(IndexNodeString));
     IndexNodeString *a=malloc(sizeof(IndexNodeString));
-    IndexNodeInt *y=malloc(sizeof(IndexNodeInt));  
+    IndexNodeInt *y=malloc(sizeof(c));  
     //Set every field of n, s, a, y to 0
     memset(n, 0, sizeof(IndexNodeString));
     memset(s, 0, sizeof(IndexNodeString));
     memset(a, 0, sizeof(IndexNodeString));
-    memset(y, 0, sizeof(IndexNodeString));
+    memset(y, 0, sizeof(IndexNodeInt));
     d->name=n;
     d->surname=s;
     d->address=a;
