@@ -7,11 +7,12 @@ Database *newDatabase() {
     IndexNodeString *n=malloc(sizeof(IndexNodeString));
     IndexNodeString *s=malloc(sizeof(IndexNodeString));
     IndexNodeString *a=malloc(sizeof(IndexNodeString));
-    IndexNodeInt *y=malloc(sizeof(IndexNodeInt));
-    n={0};
-    s={0};
-    a={0};
-    y={0};
+    IndexNodeInt *y=malloc(sizeof(IndexNodeInt));  
+    //Set every field of n, s, a, y to 0
+    memset(n, 0, sizeof(IndexNodeString));
+    memset(s, 0, sizeof(IndexNodeString));
+    memset(a, 0, sizeof(IndexNodeString));
+    memset(y, 0, sizeof(IndexNodeString));
     d->name=n;
     d->surname=s;
     d->address=a;
@@ -21,11 +22,11 @@ Database *newDatabase() {
 
 struct Persona *newPersona(char* n, char* s, char* a, int age){
     struct Persona *p=malloc(sizeof(struct Persona)); 
-    p->name=malloc(sizeof(n));
+    p->name=malloc(strlen(n)+1);
     strcpy(p->name,n);
-    p->surname=malloc(sizeof(s));
+    p->surname=malloc(strlen(s)+1);
     strcpy(p->surname,s);
-    p->address=malloc(sizeof(a));
+    p->address=malloc(strlen(a));
     strcpy(p->address,a);
     p->age=age;
 }
@@ -102,10 +103,10 @@ void insertBySurname(IndexNodeString *database, struct Persona *persona) {
 }
 
 void insertByAddress(IndexNodeString *database, struct Persona *persona) {
-    if (database == NULL) {
+   /* if (database == NULL) {
         printf("PROBLEMI PROBLEMI PROBLEMI\n");
         return;
-    }
+    }*/
     if (database->value == NULL) {
         database->value=persona->address;
         database->user=persona;
