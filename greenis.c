@@ -16,8 +16,6 @@
 typedef struct node Node;
 char *temp="-"; //I use this to set the value that the server sends when a GET request goes well
 
-sem_t semaphore;
-
 struct node{
     char *key;
     char *value;
@@ -58,13 +56,13 @@ int get_value(char* key, Node *n) {
                 }
                 else {
                     if (time(NULL)-t->time_creation<=t->ttl){ //< or <=? 
-                    temp=t->value;
+                        temp=t->value;
                         return 2;
                     }
                     else
                         return 0;
                 }
-        }
+            }
         }
         t=t->next;
     }
@@ -93,7 +91,6 @@ int interprete(char *input, Node *n) { //works on the string sent by the client 
     if (strstr(input, "CLIENT"))    //CONNECTION request
         return 1;
     else if (strstr(input, "SET")){  //SET request
-        char *t=input;
         char *tok=strtok(t, "$");
         int i=1; 
         char *k;
