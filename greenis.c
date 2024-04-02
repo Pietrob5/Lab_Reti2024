@@ -6,11 +6,17 @@
 #include <unistd.h>
 #include <time.h>
 #include <ctype.h>
+#include <semaphore.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
 
 #define PORT 7379
 
 typedef struct node Node;
 char *temp="-"; //I use this to set the value that the server sends when a GET request goes well
+
+sem_t semaphore;
 
 struct node{
     char *key;
@@ -165,7 +171,7 @@ int interprete(char *input, Node *n) { //works on the string sent by the client 
     }
 }
 
-void server_tcp(Node *n) {
+void server_tcp(Node *n, int sem) {
     int server_fd, new_socket;
     ssize_t valread;
     struct sockaddr_in address;
@@ -207,11 +213,19 @@ void server_tcp(Node *n) {
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, &addrlen)) < 0){
             exit_with_error("accept");
         }
+        struct sembuf sem_op={0, 1, 0};
+        int s=semop(sem, &sem_op, 1);
+        if (s==-1)
+            exit_with_error("semop error");
         pid_t p=fork();
         if (p==-1){
             exit_with_error("fork error");
         }
         else if(p==0){
+            struct sembuf sem_op={0, -1, 0};
+            s=semop(sem, &sem_op, 1);
+            if (s==-1)
+                exit_with_error("semop error");
             while(1){
                 valread = read(new_socket, buffer, 1024 - 1); 
                 printf("comando ricevuto: %s\n", buffer);
@@ -235,7 +249,7 @@ void server_tcp(Node *n) {
                         r[2]=str[1];
                     }
                     else {                
-                    r[1]=len+48;
+                        r[1]=len+48;
                     }
                     r[2+x]='\r';
                     r[3+x]='\n';
@@ -249,6 +263,7 @@ void server_tcp(Node *n) {
                     printf("Reply message sent: %s\n", r);
                     if (r!=NULL)
                         free(r);
+                        temp="-"; //maybe useless
                 }
                 else{
                     send(new_socket, notok, strlen(notok), 0);
@@ -259,6 +274,10 @@ void server_tcp(Node *n) {
             }
             close(new_socket);
             close(server_fd);
+            sem_op.sem_op=1;
+            s=semop(sem, &sem_op, 1);
+            if (s==-1)
+                exit_with_error("semop error");
         }
     }
     if (ok!=NULL)
@@ -278,8 +297,22 @@ void freeNode(Node *n) {
 }
 
 int main(int argc, const char * argv[]) {
+    //semaphore initialization
+    int sem=semget(IPC_PRIVATE, 1, 0600);
+    if (sem==-1)   
+        exit_with_error("semget error");
+    union semun{
+        int val;
+        struct semid_ds *buf;
+        unsigned short *array;
+        struct seminfo *__buf;
+    };
+    union semun sem_val={.val=0};
+    int x=semctl(sem, 0, SETVAL, sem_val);
+    if (x==-1)
+        exit_with_error("semctl error");
     Node *n=createNode();
-    server_tcp(n);
+    server_tcp(n, sem);
     freeNode(n);
     return 0;
 }
