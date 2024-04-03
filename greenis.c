@@ -91,6 +91,7 @@ int interprete(char *input, Node *n) { //works on the string sent by the client 
     if (strstr(input, "CLIENT"))    //CONNECTION request
         return 1;
     else if (strstr(input, "SET")){  //SET request
+    char *t=input;
         char *tok=strtok(t, "$");
         int i=1; 
         char *k;
